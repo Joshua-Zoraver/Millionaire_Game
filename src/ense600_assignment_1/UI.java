@@ -1,6 +1,9 @@
 package ense600_assignment_1;
 
-import java.util.Scanner;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 /**
@@ -9,52 +12,80 @@ import java.util.List;
  */
 public class UI {
 
-    // Instance variable
-    private Scanner scanner;
+    // Components for the GUI
+    private JFrame frame;
+    private JTextArea questionTextArea;
+    private JButton[] optionButtons;
+    private JButton lifelineButton;
+    private JLabel scoreLabel;
 
-    // Constructor to initialize the UI instance with a Scanner for user input.
+    // Constructor to initialize the UI instance with Swing components.
     public UI() {
-        scanner = new Scanner(System.in);
+        frame = new JFrame("Millionaire Quiz");
+        frame.setSize(400, 300);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLayout(new BorderLayout());
+
+        questionTextArea = new JTextArea();
+        questionTextArea.setEditable(false);
+        frame.add(questionTextArea, BorderLayout.NORTH);
+
+        JPanel optionsPanel = new JPanel();
+        optionsPanel.setLayout(new GridLayout(4, 1));
+        optionButtons = new JButton[4];
+        for (int i = 0; i < 4; i++) {
+            optionButtons[i] = new JButton();
+            optionsPanel.add(optionButtons[i]);
+        }
+        frame.add(optionsPanel, BorderLayout.CENTER);
+
+        scoreLabel = new JLabel();
+        frame.add(scoreLabel, BorderLayout.SOUTH);
+
+        lifelineButton = new JButton("Use Lifeline");
+        frame.add(lifelineButton, BorderLayout.EAST);
+
+        frame.setVisible(true);
     }
 
     // Display the question text and answer options.
     public void displayQuestion(Question question) {
-        System.out.println(question.getQuestionText());
+        questionTextArea.setText(question.getQuestionText());
 
         List<String> options = question.getOptions();
         for (int i = 0; i < options.size(); i++) {
-            System.out.println(options.get(i));
+            optionButtons[i].setText(options.get(i));
+
+            // Remove existing listeners to prevent accumulating listeners
+            for (ActionListener al : optionButtons[i].getActionListeners()) {
+                optionButtons[i].removeActionListener(al);
+            }
+
+            int finalI = i;  // For use inside the anonymous class
+            optionButtons[i].addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+
+                }
+            });
         }
     }
 
-    // Get user input with a provided prompt.
-    public String getUserInput(String prompt) {
-        displayMessage(prompt);
-        return scanner.nextLine();
-    }
-
-    // Display a message to the user.
+    // Display a message to the user using a JOptionPane.
     public void displayMessage(String message) {
-        System.out.println(message);
+        JOptionPane.showMessageDialog(frame, message);
     }
 
     // Display the player's username and score.
     public void displayScore(Player player) {
-        displayMessage("Player: " + player.getUsername());
-        displayMessage("Score: $" + player.getScore());
+        scoreLabel.setText("Player: " + player.getUsername() + " | Score: $" + player.getScore());
     }
 
-    // Close the scanner used for user input.
-    public void closeScanner() {
-        scanner.close();
-    }
-
-    // Display the lifeline status to inform the player whether it's available or used.
+    // Display the lifeline status on the lifeline button.
     public void lifelineStatus(boolean lifelineUsed) {
         if (lifelineUsed) {
-            displayMessage("Lifeline has already been used.");
+            lifelineButton.setEnabled(false);
         } else {
-            displayMessage("You have a lifeline available. Enter 'L' to use it.");
+            lifelineButton.setEnabled(true);
         }
     }
 }
