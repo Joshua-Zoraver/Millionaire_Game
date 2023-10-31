@@ -49,7 +49,7 @@ public class UI {
     }
 
     // Display the question text and answer options.
-    public void displayQuestion(Question question, Game gameInstance) {
+    public void displayQuestion(Question question) {
         questionTextArea.setText(question.getQuestionText());
 
         List<String> options = question.getOptions();
@@ -61,15 +61,13 @@ public class UI {
                 optionButtons[i].removeActionListener(al);
             }
 
-            int finalI = i;  // For use inside the lambda expression
-            optionButtons[i].addActionListener(e -> {
-                gameInstance.handleAnswer(options.get(finalI));
+            int finalI = i;  // For use inside the anonymous class
+            optionButtons[i].addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+
+                }
             });
         }
-
-        lifelineButton.addActionListener(e -> {
-            gameInstance.handleAnswer("L");
-        });
     }
 
     // Display a message to the user using a JOptionPane.

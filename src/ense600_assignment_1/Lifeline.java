@@ -3,7 +3,6 @@ package ense600_assignment_1;
 import java.util.List;
 import java.util.Random;
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -11,13 +10,16 @@ import javax.swing.JOptionPane;
  */
 public class Lifeline {
 
+    // Instance variable
     private final Random random;
 
+    // Constructor to initialize the Lifeline instance.
     public Lifeline() {
         random = new Random();
     }
 
-    public String use(Player player, Question question, UI ui, Game game) {
+    // Uses the lifeline to eliminate two incorrect options from the current question.
+    public String use(Player player, Question question) {
         List<String> options = question.getOptions();
 
         List<Integer> incorrectIndices = getIncorrectIndices(options, question.getCorrectAnswer());
@@ -33,10 +35,13 @@ public class Lifeline {
             eliminateCount--;
         }
 
+        UI ui = new UI();
         ui.displayMessage("Using the Lifeline - Two incorrect options have been eliminated:");
-        ui.displayQuestion(question, game);
+        ui.displayQuestion(question);
 
-        return "";
+        String playerAnswer = ui.getUserInput("Enter your answer: (A, B, C, D)").toUpperCase();
+
+        return playerAnswer;
     }
 
     // Retrieves the indices of incorrect options in the given list of options.
@@ -51,5 +56,4 @@ public class Lifeline {
 
         return incorrectIndices;
     }
-
 }

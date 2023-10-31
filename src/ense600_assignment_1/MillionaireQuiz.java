@@ -1,7 +1,6 @@
 package ense600_assignment_1;
 
 import java.util.List;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -21,12 +20,11 @@ public class MillionaireQuiz {
         PlayerManager playerManager = new PlayerManager();
         Player player = null;
 
-        String playerName = null;
-        while (playerName == null || playerName.trim().isEmpty()) {
-            playerName = JOptionPane.showInputDialog(null, "Please enter your name:");
-            if (playerName != null && !playerName.trim().isEmpty()) {
-                player = playerManager.getPlayer(playerName);
-            } else {
+        while (player == null) {
+            ui.displayMessage("Please enter your name: ");
+            String playerName = ui.getUserInput("");
+            player = playerManager.getPlayer(playerName);
+            if (player == null) {
                 ui.displayMessage("Invalid input. Please enter a valid name.");
             }
         }
@@ -34,10 +32,8 @@ public class MillionaireQuiz {
         ui.displayMessage("Hello, " + player.getUsername() + "! Let's play!");
 
         Game game = new Game(player, playerManager, questions, ui);
+
         game.startGame();
-
-        // This assumes the UI class has a method to close the scanner.
-        ui.close();
+        ui.closeScanner();
     }
-
 }
