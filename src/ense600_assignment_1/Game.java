@@ -31,7 +31,6 @@ public class Game {
     //Starts the game and progresses through the questions.
     public void startGame() {
         this.questionNumber = 0;
-        int moneyChange = 1000;
         shuffleQuestions(questions);
         displayNextQuestion();
     }
@@ -40,7 +39,7 @@ public class Game {
     public void displayNextQuestion() {
         if (questionNumber < questions.size()) {
             Question currentQuestion = questions.get(questionNumber);
-            ui.displayQuestion(currentQuestion);
+            ui.displayQuestion(currentQuestion, this);
             ui.displayMessage("Question " + (questionNumber + 1) + ":");
             ui.lifelineStatus(lifelineUsed);
             // Now, the UI will wait for button click events to progress.
@@ -90,6 +89,7 @@ public class Game {
             ui.close();  // Close the GUI without terminating the entire program
         }
     }
+
     // Restarts the game, resetting scores and lifeline status.
     private void restartGame() {
         player.setScore(0);
@@ -114,11 +114,10 @@ public class Game {
         }
     }
 
-    // Use lifeline can be adapted for GUI, maybe to eliminate wrong choices or provide hints
     private String useLifeline() {
         if (this.questionNumber < questions.size() && !lifelineUsed) {
             Lifeline lifeline = new Lifeline();
-            return lifeline.use(player, questions.get(this.questionNumber));
+            return lifeline.use(player, questions.get(this.questionNumber), ui, this);
         } else {
             return "";
         }
