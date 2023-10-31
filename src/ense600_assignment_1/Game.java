@@ -45,10 +45,18 @@ public class Game {
             System.out.println("displaying question: " + currentQuestion.getQuestionText());
             ui.displayQuestion(currentQuestion, this);
             ui.displayMessage("Question " + (questionNumber + 1) + ":");
-            ui.lifelineStatus(lifelineUsed);
+            try {
+                ui.lifelineStatus(lifelineUsed);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else {
             System.out.println("No more questions");
-            endGame();
+            try {
+                endGame();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

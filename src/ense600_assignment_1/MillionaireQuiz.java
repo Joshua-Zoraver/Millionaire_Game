@@ -36,8 +36,6 @@ public class MillionaireQuiz {
 
         Game game = new Game(player, playerManager, questions, ui);
         game.startGame();
-
-        ui.close();
     }
 
 }
