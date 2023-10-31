@@ -88,4 +88,13 @@ public class UI {
             lifelineButton.setEnabled(true);
         }
     }
+
+    public int showConfirmDialog(String message) {
+        return JOptionPane.showConfirmDialog(this.frame, message, "Confirm", JOptionPane.YES_NO_OPTION);
+    }
+
+    public void close() {
+        frame.dispose();
+    }
+
 }

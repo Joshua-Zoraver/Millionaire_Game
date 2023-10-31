@@ -2,6 +2,7 @@ package ense600_assignment_1;
 
 import java.util.List;
 import java.util.Random;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -31,83 +32,47 @@ public class Game {
     public void startGame() {
         this.questionNumber = 0;
         int moneyChange = 1000;
-
         shuffleQuestions(questions);
-
-        for (Question question : questions) {
-            questionNumber++;
-            ui.displayMessage("Question " + questionNumber + ":");
-            ui.displayQuestion(question);
-
-            ui.displayMessage("Select your answer (A, B, C, D) or press X to quit");
-            ui.lifelineStatus(lifelineUsed);
-
-            while (true) {
-                String answer = ui.getUserInput("");
-                answer = answer.toUpperCase();
-
-                if (answer.equalsIgnoreCase("X")) {
-                    ui.displayScore(player);
-                    endGame();
-                    return;
-                }
-
-                if (answer.equalsIgnoreCase("L") && !lifelineUsed) {
-                    answer = useLifeline();
-                    lifelineUsed = true;
-                }
-
-                if (answer.matches("[A-D]")) {
-
-                    if (question.isCorrectAnswer(answer)) {
-                        ui.displayMessage("Correct!");
-                        player.updateScore(moneyChange);
-                        if (player.getScore() >= 1000000) {
-                            player.setScore(1000000);
-                            ui.displayScore(player);
-                            System.out.println("Congratulations! You're a millionaire!");
-                            endGame();
-                        } else {
-                            ui.displayScore(player);
-                            moneyChange += moneyChange;
-                        }
-                    } else {
-                        ui.displayMessage("Incorrect!");
-                        ui.displayScore(player);
-                        endGame();
-                        return;
-                    }
-
-                    break;
-                } else {
-                    ui.displayMessage("Invalid input, please try again");
-                }
-            }
-        }
-
-        ui.displayMessage("Game Over!");
-
-        endGame();
-
+        displayNextQuestion();
     }
 
     // Displays a question and handles the user's answer.
-    public void askQuestion(Question question) {
-        ui.displayMessage(question.getQuestionText());
+    public void displayNextQuestion() {
+        if (questionNumber < questions.size()) {
+            Question currentQuestion = questions.get(questionNumber);
+            ui.displayQuestion(currentQuestion);
+            ui.displayMessage("Question " + (questionNumber + 1) + ":");
+            ui.lifelineStatus(lifelineUsed);
+            // Now, the UI will wait for button click events to progress.
+        } else {
+            endGame();
+        }
+    }
 
-        List<String> options = question.getOptions();
-        for (int i = 0; i < options.size(); i++) {
-            ui.displayMessage((char) ('A' + i) + ") " + options.get(i));
+    // This method can be called from the UI when a button is clicked
+    public void handleAnswer(String answer) {
+        Question currentQuestion = questions.get(questionNumber);
+
+        if (answer.equalsIgnoreCase("L") && !lifelineUsed) {
+            answer = useLifeline();
+            lifelineUsed = true;
+            // Update UI to reflect lifeline use. Maybe disable lifeline button.
         }
 
-        String playerAnswer = ui.getUserInput("Enter your answer: (A, B, C, D)").toUpperCase();
-
-        if (question.isCorrectAnswer(playerAnswer)) {
-            ui.displayMessage("Correct!");
-            player.updateScore(1000);
+        if (answer.matches("[A-D]")) {
+            if (currentQuestion.isCorrectAnswer(answer)) {
+                ui.displayMessage("Correct!");
+                player.updateScore(player.getScore() + 1000);
+                ui.displayScore(player);
+            } else {
+                ui.displayMessage("Incorrect!");
+                endGame();
+                return;
+            }
+            questionNumber++;
+            displayNextQuestion();
         } else {
-            ui.displayMessage("Incorrect!");
-            endGame();
+            ui.displayMessage("Invalid input, please try again");
         }
     }
 
@@ -115,20 +80,16 @@ public class Game {
     public void endGame() {
         ui.displayMessage("Game Over!");
 
-        String playAgain = ui.getUserInput("Do you want to play again? (Type \"yes\" to continue, or anything else to end)").toLowerCase();
+        int response = ui.showConfirmDialog("Do you want to play again?");
 
-        if (playAgain.equals("yes")) {
+        if (response == JOptionPane.YES_OPTION) {
             restartGame();
         } else {
             ui.displayMessage("Thank you for playing!");
-            PlayerManager playerManager = new PlayerManager();
             playerManager.updatePlayerScore(player.getUsername(), player.getScore());
-            System.exit(0);
+            ui.close();  // Close the GUI without terminating the entire program
         }
-
-        playerManager.updatePlayerScore(player.getUsername(), player.getScore());
     }
-
     // Restarts the game, resetting scores and lifeline status.
     private void restartGame() {
         player.setScore(0);
@@ -153,11 +114,11 @@ public class Game {
         }
     }
 
-    // Uses a lifeline for the current question.
+    // Use lifeline can be adapted for GUI, maybe to eliminate wrong choices or provide hints
     private String useLifeline() {
-        if (this.questionNumber > 0 && !lifelineUsed) {
+        if (this.questionNumber < questions.size() && !lifelineUsed) {
             Lifeline lifeline = new Lifeline();
-            return lifeline.use(player, questions.get(this.questionNumber - 1));
+            return lifeline.use(player, questions.get(this.questionNumber));
         } else {
             return "";
         }
