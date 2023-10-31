@@ -13,11 +13,11 @@ import java.util.List;
 public class UI {
 
     // Components for the GUI
-    private JFrame frame;
-    private JTextArea questionTextArea;
-    private JButton[] optionButtons;
-    private JButton lifelineButton;
-    private JLabel scoreLabel;
+    private final JFrame frame;
+    private final JTextArea questionTextArea;
+    private final JButton[] optionButtons;
+    private final JButton lifelineButton;
+    private final JLabel scoreLabel;
 
     // Constructor to initialize the UI instance with Swing components.
     public UI() {
