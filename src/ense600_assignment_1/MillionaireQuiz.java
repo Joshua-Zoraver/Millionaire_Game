@@ -11,6 +11,7 @@ public class MillionaireQuiz {
 
     // Main method
     public static void main(String[] args) {
+
         String filename = "./resources/questions.txt";
         QuestionLoader questionLoader = new QuestionLoader();
         List<Question> questions = questionLoader.loadQuestionsFromFile(filename);

@@ -61,12 +61,16 @@ public class UI {
                 optionButtons[i].removeActionListener(al);
             }
 
-            int finalI = i;  // For use inside the lambda expression
+            // Map the index to the answer label (A, B, C, D)
+            char answerLabel = (char) ('A' + i);
             optionButtons[i].addActionListener(e -> {
-                gameInstance.handleAnswer(options.get(finalI));
+                gameInstance.handleAnswer(String.valueOf(answerLabel));
             });
         }
 
+        for (ActionListener al : lifelineButton.getActionListeners()) {
+            lifelineButton.removeActionListener(al);
+        }
         lifelineButton.addActionListener(e -> {
             gameInstance.handleAnswer("L");
         });

@@ -73,6 +73,7 @@ public class Game {
         } else {
             ui.displayMessage("Invalid input, please try again");
         }
+
     }
 
     // Ends the game and provides an option to play again.
