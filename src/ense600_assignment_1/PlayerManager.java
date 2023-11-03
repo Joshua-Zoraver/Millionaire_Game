@@ -1,77 +1,115 @@
 package ense600_assignment_1;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- *
- * @author Joshua and Zoraver
- */
 public class PlayerManager {
 
-    // // Instance variables
     private Map<String, Player> players;
-    private static final String FILE_PATH = "./resources/players.txt";
+    private Connection conn;
 
-    // Constructor to initialize the PlayerManager instance.
     public PlayerManager() {
-        players = loadPlayers();
+        // Here, establish a database connection
+        try (Connection conn = establishDatabaseConnection()) {
+            createPlayersTableIfNotExists(conn);
+            this.conn = establishDatabaseConnection();
+            this.players = loadPlayersFromDatabase();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Handle exceptions or log them
+        }
     }
 
-    // Get a player by their username. If the player does not exist, create a new player with a score of 0.
+    private Connection establishDatabaseConnection() {
+        // Database connection details
+        String url = "jdbc:derby://localhost:1527/Users";
+        String user = "ENSE600";
+        String password = "AUT";
+
+        try {
+            // Explicitly load the Derby driver class
+            Class.forName("org.apache.derby.jdbc.ClientDriver");
+            return DriverManager.getConnection(url, user, password);
+        } catch (ClassNotFoundException e) {
+            System.err.println("Derby JDBC Driver not found.");
+            e.printStackTrace();
+            return null;
+        } catch (SQLException e) {
+            System.err.println("Connection failed.");
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public Player getPlayer(String username) {
         if (players.containsKey(username)) {
             return players.get(username);
         } else {
+            // Insert new player into database
+            insertNewPlayerIntoDatabase(username);
             Player newPlayer = new Player(username, 0);
             players.put(username, newPlayer);
-            savePlayers();
             return newPlayer;
         }
     }
 
-    // Load player data from the file and populate the 'players' map.
-    private Map<String, Player> loadPlayers() {
+    private Map<String, Player> loadPlayersFromDatabase() {
         Map<String, Player> loadedPlayers = new HashMap<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length == 2) {
-                    String username = parts[0].trim();
-                    int score = Integer.parseInt(parts[1].trim());
-                    loadedPlayers.put(username, new Player(username, score));
-                }
+        String query = "SELECT username, score FROM Players";
+
+        try (Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
+            while (rs.next()) {
+                String username = rs.getString("username");
+                int score = rs.getInt("score");
+                loadedPlayers.put(username, new Player(username, score));
             }
-        } catch (IOException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return loadedPlayers;
     }
 
-    // Save player data from the 'players' map to the file.
-    private void savePlayers() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
-            for (Player player : players.values()) {
-                writer.write(player.getUsername() + "," + player.getScore());
-                writer.newLine();
-            }
-        } catch (IOException e) {
+    private void insertNewPlayerIntoDatabase(String username) {
+        String insertSql = "INSERT INTO Players (username, score) VALUES (?, 0)";
+        try (PreparedStatement pstmt = conn.prepareStatement(insertSql)) {
+            pstmt.setString(1, username);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    // Update the score of a player with a specified username.
     public void updatePlayerScore(String username, int scoreChange) {
         if (players.containsKey(username)) {
             Player player = players.get(username);
-            player.updateScore(scoreChange);
-            savePlayers();
+            updatePlayerScoreInDatabase(player);
+        }
+    }
+
+    private void updatePlayerScoreInDatabase(Player player) {
+        String updateSql = "UPDATE Players SET score = ? WHERE username = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(updateSql)) {
+            pstmt.setInt(1, player.getScore());
+            pstmt.setString(2, player.getUsername());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void createPlayersTableIfNotExists(Connection conn) throws SQLException {
+        DatabaseMetaData dbm = conn.getMetaData();
+        ResultSet tables = dbm.getTables(null, null, "PLAYERS", null);
+        if (!tables.next()) {
+            // Table does not exist, so create it
+            try (Statement stmt = conn.createStatement()) {
+                String sql = "CREATE TABLE Players ("
+                        + "username VARCHAR(255),"
+                        + "score INT"
+                        + ")";
+                stmt.executeUpdate(sql);
+            }
         }
     }
 }
