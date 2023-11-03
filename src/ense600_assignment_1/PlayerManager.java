@@ -44,9 +44,13 @@ public class PlayerManager {
 
     public Player getPlayer(String username) {
         if (players.containsKey(username)) {
-            return players.get(username);
+            // Player is a returning player, reset the score to 0
+            Player player = players.get(username);
+            player.setScore(0); // Reset the score to 0
+            updatePlayerScoreInDatabase(player); // Update the score in the database
+            return player;
         } else {
-            // Insert new player into database
+            // Insert new player into database with score 0
             insertNewPlayerIntoDatabase(username);
             Player newPlayer = new Player(username, 0);
             players.put(username, newPlayer);
@@ -90,7 +94,7 @@ public class PlayerManager {
     private void updatePlayerScoreInDatabase(Player player) {
         String updateSql = "UPDATE Players SET score = ? WHERE username = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(updateSql)) {
-            pstmt.setInt(1, player.getScore());
+            pstmt.setInt(1, player.getScore()); // Here the score is taken from the player object
             pstmt.setString(2, player.getUsername());
             pstmt.executeUpdate();
         } catch (SQLException e) {
