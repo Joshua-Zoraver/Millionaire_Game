@@ -10,13 +10,15 @@ import javax.swing.JOptionPane;
  * @author Joshua and Zoraver
  */
 public class Lifeline {
-
+    // Instance variables
     private final Random random;
 
+    // Constructor
     public Lifeline() {
         random = new Random();
     }
-
+    
+    // Uses the lifeline to eliminate two incorrect answers from the question options.
     public String use(Player player, Question question, UI ui, Game game) {
         List<String> options = question.getOptions();
 

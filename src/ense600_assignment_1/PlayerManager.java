@@ -10,7 +10,7 @@ public class PlayerManager {
     private Connection conn;
 
     public PlayerManager() {
-        // Here, establish a database connection
+        // Establish a database connection
         try (Connection conn = establishDatabaseConnection()) {
             createPlayersTableIfNotExists(conn);
             this.conn = establishDatabaseConnection();
@@ -42,6 +42,7 @@ public class PlayerManager {
         }
     }
 
+    // Retrieves or creates a player object and resets the score for returning players
     public Player getPlayer(String username) {
         if (players.containsKey(username)) {
             // Player is a returning player, reset the score to 0
@@ -58,6 +59,7 @@ public class PlayerManager {
         }
     }
 
+    // Loads all players and their scores from the database into a map.
     private Map<String, Player> loadPlayersFromDatabase() {
         Map<String, Player> loadedPlayers = new HashMap<>();
         String query = "SELECT username, score FROM Players";
@@ -74,6 +76,7 @@ public class PlayerManager {
         return loadedPlayers;
     }
 
+    // Inserts a new player with a score of 0 into the database.
     private void insertNewPlayerIntoDatabase(String username) {
         String insertSql = "INSERT INTO Players (username, score) VALUES (?, 0)";
         try (PreparedStatement pstmt = conn.prepareStatement(insertSql)) {
@@ -84,6 +87,7 @@ public class PlayerManager {
         }
     }
 
+    // Updates the score of the player in the local map and database.
     public void updatePlayerScore(String username, int scoreChange) {
         if (players.containsKey(username)) {
             Player player = players.get(username);
@@ -91,6 +95,7 @@ public class PlayerManager {
         }
     }
 
+    // Executes the update operation to change the player's score in the database.
     private void updatePlayerScoreInDatabase(Player player) {
         String updateSql = "UPDATE Players SET score = ? WHERE username = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(updateSql)) {
@@ -102,6 +107,7 @@ public class PlayerManager {
         }
     }
 
+    // Checks for the existence of the Players table and creates it if it does not exist.
     private void createPlayersTableIfNotExists(Connection conn) throws SQLException {
         DatabaseMetaData dbm = conn.getMetaData();
         ResultSet tables = dbm.getTables(null, null, "PLAYERS", null);

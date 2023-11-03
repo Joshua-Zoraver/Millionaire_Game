@@ -50,36 +50,33 @@ public class UI {
 
     // Display the question text and answer options.
     public void displayQuestion(Question question, Game gameInstance) {
-        System.out.println("\nsetting question text");
         questionTextArea.setText(question.getQuestionText());
 
         List<String> options = question.getOptions();
-        System.out.println("Setting answers");
+
         for (int i = 0; i < options.size(); i++) {
             optionButtons[i].setText(options.get(i));
 
             // Remove existing listeners to prevent accumulating listeners
-            System.out.println("removing existing listeners for option button " + (i + 1));
             for (ActionListener al : optionButtons[i].getActionListeners()) {
                 optionButtons[i].removeActionListener(al);
             }
 
             // Map the index to the answer label (A, B, C, D)
             char answerLabel = (char) ('A' + i);
-            System.out.println("adding new listener for option button " + answerLabel);
+
             optionButtons[i].addActionListener(e -> {
                 gameInstance.handleAnswer(String.valueOf(answerLabel));
             });
         }
-        System.out.println("configuring lifeline button");
+
         for (ActionListener al : lifelineButton.getActionListeners()) {
             lifelineButton.removeActionListener(al);
         }
         lifelineButton.addActionListener(e -> {
             gameInstance.handleAnswer("L");
         });
-        
-        System.out.println("Question and options set up complete.");
+
     }
 
     // Display a message to the user using a JOptionPane.
@@ -101,12 +98,13 @@ public class UI {
         }
     }
 
+    // Displays a confirmation dialog with YES and NO options and returns the user's choice.
     public int showConfirmDialog(String message) {
         return JOptionPane.showConfirmDialog(this.frame, message, "Confirm", JOptionPane.YES_NO_OPTION);
     }
 
+    // Disposes frame, closing the window
     public void close() {
-        System.out.println("ENDING APPLICATION VIA CLOSE METHOD");
         frame.dispose();
     }
 
