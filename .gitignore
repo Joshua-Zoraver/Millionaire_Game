@@ -1,2 +1,6 @@
 /nbproject/private/
 /build/
+.DS_Store
+/PlayersDB/
+/db.lck
+derby.log
