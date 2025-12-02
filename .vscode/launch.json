@@ -1,0 +1,11 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Run MillionaireQuiz",
+      "request": "launch",
+      "mainClass": "ense600_assignment_2.MillionaireQuiz"
+    }
+  ]
+}
