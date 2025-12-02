@@ -1,86 +1,13 @@
-Fri Nov 03 20:46:59 NZDT 2023 : Apache Derby Network Server - 10.14.2.0 - (1828579) started and ready to accept connections on port 1527
-Fri Nov 03 20:52:37 NZDT 2023 Thread[DRDAConnThread_2,5,main] Cleanup action starting
-java.sql.SQLException: Database 'Users' not found.
-	at org.apache.derby.impl.jdbc.SQLExceptionFactory.getSQLException(Unknown Source)
-	at org.apache.derby.impl.jdbc.SQLExceptionFactory.getSQLException(Unknown Source)
-	at org.apache.derby.impl.jdbc.Util.generateCsSQLException(Unknown Source)
-	at org.apache.derby.impl.jdbc.Util.generateCsSQLException(Unknown Source)
-	at org.apache.derby.impl.jdbc.EmbedConnection.newSQLException(Unknown Source)
-	at org.apache.derby.impl.jdbc.EmbedConnection.handleDBNotFound(Unknown Source)
-	at org.apache.derby.impl.jdbc.EmbedConnection.<init>(Unknown Source)
-	at org.apache.derby.jdbc.InternalDriver$1.run(Unknown Source)
-	at org.apache.derby.jdbc.InternalDriver$1.run(Unknown Source)
-	at java.base/java.security.AccessController.doPrivileged(Native Method)
-	at org.apache.derby.jdbc.InternalDriver.getNewEmbedConnection(Unknown Source)
-	at org.apache.derby.jdbc.InternalDriver.connect(Unknown Source)
-	at org.apache.derby.jdbc.InternalDriver.connect(Unknown Source)
-	at org.apache.derby.jdbc.EmbeddedDriver.connect(Unknown Source)
-	at org.apache.derby.impl.drda.Database.makeConnection(Unknown Source)
-	at org.apache.derby.impl.drda.DRDAConnThread.getConnFromDatabaseName(Unknown Source)
-	at org.apache.derby.impl.drda.DRDAConnThread.verifyUserIdPassword(Unknown Source)
-	at org.apache.derby.impl.drda.DRDAConnThread.parseSECCHK(Unknown Source)
-	at org.apache.derby.impl.drda.DRDAConnThread.parseDRDAConnection(Unknown Source)
-	at org.apache.derby.impl.drda.DRDAConnThread.processCommands(Unknown Source)
-	at org.apache.derby.impl.drda.DRDAConnThread.run(Unknown Source)
-Caused by: ERROR XJ004: Database 'Users' not found.
-	at org.apache.derby.iapi.error.StandardException.newException(Unknown Source)
-	at org.apache.derby.impl.jdbc.SQLExceptionFactory.wrapArgsForTransportAcrossDRDA(Unknown Source)
-	... 21 more
-============= begin nested exception, level (1) ===========
-ERROR XJ004: Database 'Users' not found.
-	at org.apache.derby.iapi.error.StandardException.newException(Unknown Source)
-	at org.apache.derby.impl.jdbc.SQLExceptionFactory.wrapArgsForTransportAcrossDRDA(Unknown Source)
-	at org.apache.derby.impl.jdbc.SQLExceptionFactory.getSQLException(Unknown Source)
-	at org.apache.derby.impl.jdbc.SQLExceptionFactory.getSQLException(Unknown Source)
-	at org.apache.derby.impl.jdbc.Util.generateCsSQLException(Unknown Source)
-	at org.apache.derby.impl.jdbc.Util.generateCsSQLException(Unknown Source)
-	at org.apache.derby.impl.jdbc.EmbedConnection.newSQLException(Unknown Source)
-	at org.apache.derby.impl.jdbc.EmbedConnection.handleDBNotFound(Unknown Source)
-	at org.apache.derby.impl.jdbc.EmbedConnection.<init>(Unknown Source)
-	at org.apache.derby.jdbc.InternalDriver$1.run(Unknown Source)
-	at org.apache.derby.jdbc.InternalDriver$1.run(Unknown Source)
-	at java.base/java.security.AccessController.doPrivileged(Native Method)
-	at org.apache.derby.jdbc.InternalDriver.getNewEmbedConnection(Unknown Source)
-	at org.apache.derby.jdbc.InternalDriver.connect(Unknown Source)
-	at org.apache.derby.jdbc.InternalDriver.connect(Unknown Source)
-	at org.apache.derby.jdbc.EmbeddedDriver.connect(Unknown Source)
-	at org.apache.derby.impl.drda.Database.makeConnection(Unknown Source)
-	at org.apache.derby.impl.drda.DRDAConnThread.getConnFromDatabaseName(Unknown Source)
-	at org.apache.derby.impl.drda.DRDAConnThread.verifyUserIdPassword(Unknown Source)
-	at org.apache.derby.impl.drda.DRDAConnThread.parseSECCHK(Unknown Source)
-	at org.apache.derby.impl.drda.DRDAConnThread.parseDRDAConnection(Unknown Source)
-	at org.apache.derby.impl.drda.DRDAConnThread.processCommands(Unknown Source)
-	at org.apache.derby.impl.drda.DRDAConnThread.run(Unknown Source)
-============= end nested exception, level (1) ===========
-Cleanup action completed
-Fri Nov 03 20:52:37 NZDT 2023 Thread[DRDAConnThread_2,5,main] (DATABASE = Users), (DRDAID = {1}), Database 'Users' not found.
 ----------------------------------------------------------------
-Fri Nov 03 20:54:22 NZDT 2023:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-018b-9426-48c4-ffffed75a86d 
-on database directory C:\Users\justf\Documents\NetBeansProjects\P98_21155266_21153671\ENSE600_Assignment_1\Users with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@2cdf8d8a 
-Loaded from file:/C:/Users/justf/Downloads/db-derby-10.14.2.0-bin/db-derby-10.14.2.0-bin/lib/derby.jar
+Tue Dec 02 16:10:04 NZDT 2025:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-019a-dd09-e594-000007085b28 
+on database directory /Users/zoravermalhotra/Downloads/P98_21155266_21153671-2/ENSE600_Assignment_1/PlayersDB with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@677327b6 
+Loaded from file:/Users/zoravermalhotra/Downloads/P98_21155266_21153671-2/ENSE600_Assignment_1/lib/derby.jar
 java.vendor=Oracle Corporation
-java.runtime.version=11.0.19+9-LTS-224
-user.dir=C:\Users\justf\Downloads\db-derby-10.14.2.0-bin\db-derby-10.14.2.0-bin
-os.name=Windows 11
-os.arch=amd64
-os.version=10.0
-derby.system.home=C:\Users\justf\Documents\NetBeansProjects\P98_21155266_21153671\ENSE600_Assignment_1
-Database Class Loader started - derby.database.classpath=''
-----------------------------------------------------------------
-Fri Nov 03 20:54:23 NZDT 2023:
-Shutting down instance a816c00e-018b-9426-48c4-ffffed75a86d on database directory C:\Users\justf\Documents\NetBeansProjects\P98_21155266_21153671\ENSE600_Assignment_1\Users with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@2cdf8d8a 
-Fri Nov 03 20:54:23 NZDT 2023 Thread[DRDAConnThread_2,5,main] (DATABASE = Users), (DRDAID = {4}), Database 'Users' shutdown.
-----------------------------------------------------------------
-Fri Nov 03 20:54:38 NZDT 2023:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance 6ede40af-018b-9426-48c4-ffffed75a86d 
-on database directory C:\Users\justf\Documents\NetBeansProjects\P98_21155266_21153671\ENSE600_Assignment_1\Users with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@2cdf8d8a 
-Loaded from file:/C:/Users/justf/Downloads/db-derby-10.14.2.0-bin/db-derby-10.14.2.0-bin/lib/derby.jar
-java.vendor=Oracle Corporation
-java.runtime.version=11.0.19+9-LTS-224
-user.dir=C:\Users\justf\Downloads\db-derby-10.14.2.0-bin\db-derby-10.14.2.0-bin
-os.name=Windows 11
-os.arch=amd64
-os.version=10.0
-derby.system.home=C:\Users\justf\Documents\NetBeansProjects\P98_21155266_21153671\ENSE600_Assignment_1
+java.runtime.version=21.0.1+12-LTS-29
+user.dir=/Users/zoravermalhotra/Downloads/P98_21155266_21153671-2/ENSE600_Assignment_1
+os.name=Mac OS X
+os.arch=aarch64
+os.version=26.1
+derby.system.home=null
 Database Class Loader started - derby.database.classpath=''
