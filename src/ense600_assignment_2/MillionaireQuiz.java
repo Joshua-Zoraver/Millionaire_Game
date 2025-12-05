@@ -12,6 +12,7 @@ public class MillionaireQuiz {
     // Main method
     public static void main(String[] args) {
 
+        // Load questions from questions.txt file
         String filename = "./resources/questions.txt";
         QuestionLoader questionLoader = new QuestionLoader();
         List<Question> questions = questionLoader.loadQuestionsFromFile(filename);
@@ -22,6 +23,7 @@ public class MillionaireQuiz {
         PlayerManager playerManager = new PlayerManager();
         Player player = null;
 
+        // Prompt for username
         String playerName = null;
         while (playerName == null || playerName.trim().isEmpty()) {
             playerName = JOptionPane.showInputDialog(null, "Please enter your name:");
@@ -34,6 +36,7 @@ public class MillionaireQuiz {
 
         ui.displayMessage("Hello, " + player.getUsername() + "! Let's play!");
 
+        // Start game
         Game game = new Game(player, playerManager, questions, ui);
         game.startGame();
     }

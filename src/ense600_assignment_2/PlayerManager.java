@@ -7,25 +7,37 @@ import java.util.Map;
 public class PlayerManager {
 
     private Map<String, Player> players;
+
+    // JDBC connection to Derby DB
     private Connection conn;
 
+
+    // Attempt to connect to Derby DB
     public PlayerManager() {
+        // Connect to / create database
         this.conn = establishDatabaseConnection();
 
+        // Throw exception if it fails
         if (this.conn == null) {
             throw new RuntimeException("Failed to establish database connection.");
         }
 
         try {
+            // Ensures Players table exists
             createPlayersTableIfNotExists(this.conn);
+
+            // Load from database into the Map
             this.players = loadPlayersFromDatabase();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+
+    // Establishes a connection to an embedded Derby DB
+    // If it doesnt exist it will be created
     private Connection establishDatabaseConnection() {
-        // Database connection details
+        // Database connection URL
         String url = "jdbc:derby:PlayersDB;create=true";
 
         try {
@@ -46,9 +58,9 @@ public class PlayerManager {
     // Retrieves or creates a player object and resets the score for returning players
     public Player getPlayer(String username) {
         if (players.containsKey(username)) {
-            // Player is a returning player, reset the score to 0
+            // If Player is a returning player, reset the score to 0
             Player player = players.get(username);
-            player.setScore(0); // Reset the score to 0
+            player.setScore(0);
             updatePlayerScoreInDatabase(player); // Update the score in the database
             return player;
         } else {
