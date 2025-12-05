@@ -101,11 +101,8 @@ public class PlayerManager {
     }
 
     // Updates the score of the player in the local map and database.
-    public void updatePlayerScore(String username, int scoreChange) {
-        if (players.containsKey(username)) {
-            Player player = players.get(username);
-            updatePlayerScoreInDatabase(player);
-        }
+    public void savePlayerScore(Player player) {
+        updatePlayerScoreInDatabase(player);
     }
 
     // Executes the update operation to change the player's score in the database.

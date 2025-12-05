@@ -18,6 +18,27 @@ public class Game {
     private boolean lifelineUsed;
     private int questionNumber = 0;
 
+    // Prize ladder
+    private static final int[] PRIZE_LADDER = {
+        100,
+        200,
+        300,
+        500,
+        1000,     // first Safe haven
+        2000,
+        4000,
+        8000,
+        16000,
+        32000,    // second Safe haven
+        64000,
+        125000,
+        250000,
+        500000,
+        1000000   // top prize
+    };
+
+    private int guaranteedWinnings = 0;
+    
     // Constructor to initialize the Game instance.
     public Game(Player player, PlayerManager playerManager, List<Question> questions, UI ui) {
         this.player = player;
@@ -26,11 +47,13 @@ public class Game {
         this.playerManager = playerManager;
         this.questionNumber = 0;
         this.lifelineUsed = false;
+        this.guaranteedWinnings = 0;
     }
 
     //Starts the game and progresses through the questions.
     public void startGame() {
         this.questionNumber = 0;
+        this.guaranteedWinnings = 0;
         shuffleQuestions(questions);
         displayNextQuestion();
     }
@@ -59,23 +82,50 @@ public class Game {
     // This method can be called from the UI when a button is clicked
     public void handleAnswer(String answer) {
         Question currentQuestion = questions.get(questionNumber);
+
+        // Handle lifeline
         if (answer.equalsIgnoreCase("L") && !lifelineUsed) {
             answer = useLifeline();
             lifelineUsed = true;
         }
+
+
         if (answer.matches("[A-D]")) {
             if (currentQuestion.isCorrectAnswer(answer)) {
                 ui.displayMessage("Correct!");
-                player.updateScore(player.getScore() + 1000);
-                if (player.getScore() >= 1000000) {
-                    player.setScore(1000000);
-                    ui.displayScore(player);
+
+                // Move up prize ladder for correct answer
+                int prize = getCurrentPrize();
+                player.setScore(prize);
+
+                // Update score if on a Safe haven
+                if(isSafeHaven(questionNumber)) {
+                    guaranteedWinnings = prize;
+                }
+
+                ui.displayScore(player);
+
+                // If this was the last question then end the game
+                boolean lastQuestion = questionNumber >= questions.size() - 1 || questionNumber >= PRIZE_LADDER.length - 1;
+
+                if(lastQuestion){
+                    ui.displayMessage("Congratulations! You've won $" + player.getScore() + "!");
                     endGame();
                     return;
                 }
-                ui.displayScore(player);
+
             } else {
+                // Incorrect answer, drop to the last guaranteed amount
                 ui.displayMessage("Incorrect!");
+
+                player.setScore(guaranteedWinnings);
+                if(guaranteedWinnings > 0){
+                    ui.displayMessage("You leave with $" + guaranteedWinnings + ".");
+                } else {
+                    ui.displayMessage("You leave with nothing. Better luck next time.");
+                }
+
+                ui.displayScore(player);
                 endGame();
                 return;
             }
@@ -94,7 +144,7 @@ public class Game {
             restartGame();
         } else {
             ui.displayMessage("Thank you for playing!");
-            playerManager.updatePlayerScore(player.getUsername(), player.getScore());
+            playerManager.savePlayerScore(player);
             ui.close();  // Close the GUI without terminating the entire program
         }
     }
@@ -103,9 +153,9 @@ public class Game {
     private void restartGame() {
         player.setScore(0);
         lifelineUsed = false;
+        guaranteedWinnings = 0;
 
         for (Question question : questions) {
-
             question.resetQuestions();
         }
 
@@ -131,6 +181,17 @@ public class Game {
         } else {
             return "";
         }
+    }
+
+    // Get the prize for the current question
+    private int getCurrentPrize() {
+        int index = Math.min(questionNumber, PRIZE_LADDER.length - 1);
+        return PRIZE_LADDER[index];
+    }
+
+    // Check if current question is a Safe haven
+    private boolean isSafeHaven(int questionIndex) {
+        return questionIndex == 4 || questionIndex ==9;
     }
 
 }
