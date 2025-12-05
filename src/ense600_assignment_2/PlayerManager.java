@@ -11,7 +11,6 @@ public class PlayerManager {
     // JDBC connection to Derby DB
     private Connection conn;
 
-
     // Attempt to connect to Derby DB
     public PlayerManager() {
         // Connect to / create database
@@ -32,7 +31,6 @@ public class PlayerManager {
             e.printStackTrace();
         }
     }
-
 
     // Establishes a connection to an embedded Derby DB
     // If it doesnt exist it will be created

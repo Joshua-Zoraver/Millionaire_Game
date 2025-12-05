@@ -24,21 +24,21 @@ public class Game {
         200,
         300,
         500,
-        1000,     // first Safe haven
+        1000, // first Safe haven
         2000,
         4000,
         8000,
         16000,
-        32000,    // second Safe haven
+        32000, // second Safe haven
         64000,
         125000,
         250000,
         500000,
-        1000000   // top prize
+        1000000 // top prize
     };
 
     private int guaranteedWinnings = 0;
-    
+
     // Constructor to initialize the Game instance.
     public Game(Player player, PlayerManager playerManager, List<Question> questions, UI ui) {
         this.player = player;
@@ -89,7 +89,6 @@ public class Game {
             lifelineUsed = true;
         }
 
-
         if (answer.matches("[A-D]")) {
             if (currentQuestion.isCorrectAnswer(answer)) {
                 ui.displayMessage("Correct!");
@@ -99,7 +98,7 @@ public class Game {
                 player.setScore(prize);
 
                 // Update score if on a Safe haven
-                if(isSafeHaven(questionNumber)) {
+                if (isSafeHaven(questionNumber)) {
                     guaranteedWinnings = prize;
                 }
 
@@ -108,7 +107,7 @@ public class Game {
                 // If this was the last question then end the game
                 boolean lastQuestion = questionNumber >= questions.size() - 1 || questionNumber >= PRIZE_LADDER.length - 1;
 
-                if(lastQuestion){
+                if (lastQuestion) {
                     ui.displayMessage("Congratulations! You've won $" + player.getScore() + "!");
                     endGame();
                     return;
@@ -119,7 +118,7 @@ public class Game {
                 ui.displayMessage("Incorrect!");
 
                 player.setScore(guaranteedWinnings);
-                if(guaranteedWinnings > 0){
+                if (guaranteedWinnings > 0) {
                     ui.displayMessage("You leave with $" + guaranteedWinnings + ".");
                 } else {
                     ui.displayMessage("You leave with nothing. Better luck next time.");
@@ -191,7 +190,7 @@ public class Game {
 
     // Check if current question is a Safe haven
     private boolean isSafeHaven(int questionIndex) {
-        return questionIndex == 4 || questionIndex ==9;
+        return questionIndex == 4 || questionIndex == 9;
     }
 
 }
