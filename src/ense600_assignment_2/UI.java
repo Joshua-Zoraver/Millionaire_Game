@@ -22,7 +22,7 @@ public class UI {
     // Constructor to initialize the UI instance with Swing components.
     public UI() {
         frame = new JFrame("Millionaire Quiz");
-        frame.setSize(400, 300);
+        frame.setSize(600, 300);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
 
@@ -50,7 +50,20 @@ public class UI {
 
     // Display the question text and answer options.
     public void displayQuestion(Question question, Game gameInstance) {
-        questionTextArea.setText(question.getQuestionText());
+        int prize = gameInstance.getCurrentPrize();
+
+        // Show question value and text
+        questionTextArea.setText("Question Value: $" + prize + "\n\n" + question.getQuestionText());
+
+        // Colour code safe havens
+        if (prize == 1000 || prize == 32000){
+            questionTextArea.setBackground(new Color(0, 100, 0));
+            questionTextArea.setForeground(Color.WHITE);
+        } else {
+            questionTextArea.setBackground(Color.WHITE);
+            questionTextArea.setForeground(Color.BLACK);
+        }
+
 
         List<String> options = question.getOptions();
 

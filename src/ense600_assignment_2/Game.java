@@ -183,7 +183,7 @@ public class Game {
     }
 
     // Get the prize for the current question
-    private int getCurrentPrize() {
+    public int getCurrentPrize() {
         int index = Math.min(questionNumber, PRIZE_LADDER.length - 1);
         return PRIZE_LADDER[index];
     }
